@@ -23,29 +23,24 @@ def my_form_post():
     s_str = request.form['query_start']
     e_str = request.form['query_end']
     
-    text = text.lower()
+    processed_text = text.lower()
     
     try:
         s_date = datetime.strptime(s_str, '%Y-%m-%d').date()  
         e_date = datetime.strptime(e_str, '%Y-%m-%d').date()  
 
     except ValueError as e:
-        app.log_exception(e)
+        app.log_exception('failed date conversion' + str(s_str) + ' ' + str(e_str) + '\t' + e)
         redirect(url_for('fsailure'))
-
+    
     if news.update_dates(s_date, e_date) is False:
         app.log_exception('failed news update dates in app.py')
         return render_template('failure_alert.html'), 404      
         
-    
+    news.search(processed_text)
+    pos, neg = nlp.run_analysis(found_news)
 
-    return 'test'
-    # found_news = news.get_news(processed_text)
-    # pos, neg = nlp.run_analysis(found_news)
-
-    # result  = processed_text + '\tPOS: ' + str(pos) + '\tNEG: ' + str(neg)
-
-    # return result
+    return render_template('result.html', query=text, pos=str(pos), neg=str(neg), headlines=str(found_news))
 
 @app.route('/failure')
 def failure():

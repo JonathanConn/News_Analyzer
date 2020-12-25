@@ -1,35 +1,65 @@
-from GoogleNews import GoogleNews
+from pygooglenews import GoogleNews
+import enum
+from datetime import datetime
+
+class Topics(enum.Enum):
+    WORLD = 0 
+    NATION = 1
+    BUSINESS = 2 
+    TECHNOLOGY = 3
+    ENTERTAINMENT = 4
+    SCIENCE = 5
+    SPORTS = 6
+    HEALTH = 7
 
 class News():
 
     def __init__(self):
-        self.news = GoogleNews()    
-
-        # set news to default    
-        self.news.set_lang('en')
-        self.news.set_period('7d')
-        self.news.set_time_range('1/01/2020','1/02/2020')
-        self.news.set_encode('utf-8')
-
-    def update_dates(self, s_date, e_date):
-        if s_date < e_date:
-
-            new_s = s_date.strftime('%m/%d/%Y')
-            new_e = e_date.strftime('%m/%d/%Y')
-
-            self.news.set_time_range(new_s, new_e)
-            return True
+        self.news = GoogleNews()
         
-        else:
-            return False
-
-    def get_news(self, query):
-        self.news.get_news(query)
-        self.news.search(query)
-        
-        return self.news.get_texts()
-        
-        # headlines = googlenews.get_texts()
-
+        self.cur_search = None
+        self._from = None
+        self._to = None
 
     
+
+    # check if dates are valid
+    def __check_dates(self, s_date, e_date):
+        return self.__dateToStr(s_date) < self.__dateToStr(e_date)
+
+    # datetime to string
+    def __dateToStr(self, date, format=None):
+        if type(date) is datetime:
+            return datetime.strptime(date, '%Y-%m-%d').date()  
+        return date
+
+    # string to datetime
+    def __strToDate(self, date, format=None):        
+        if type(date) is not datetime:
+            return date.strftime('%Y/%m/%d')            
+        return date
+            
+
+    def update_dates(self, s_date, e_date):        
+        if self.__check_dates(s_date, e_date) is True:
+            self._from = self.__strToDate(s_date)
+            self._to = self.__strToDate(e_date)
+            return True
+            
+        return False
+            
+
+    def search(self, query, _from=None, _to=None):
+        if _from is not None and _to is not None:                
+            self.cur_search = self.news.search(query)
+
+        else:
+            self.cur_search = self.news.search(query)
+            
+
+        
+    
+
+
+
+  
