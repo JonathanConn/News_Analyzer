@@ -27,32 +27,33 @@ class News():
     def __check_dates(self, s_date, e_date):
         return self.__dateToStr(s_date) < self.__dateToStr(e_date)
 
-    # datetime to string
-    def __dateToStr(self, date, format=None):
+    # datetime to string (param type string/datetime okay)
+    def __dateToStr(self, date, s_format='%Y-%m-%d'):
         if type(date) is datetime:
-            return datetime.strptime(date, '%Y-%m-%d').date()  
-        return date
+            return datetime.strptime(date, s_format).date()  
+        else:
+            return date
 
-    # string to datetime
-    def __strToDate(self, date, format=None):        
+    # string to datetime (param type string/datetime okay)
+    def __strToDate(self, date, s_format='%Y/%m/%d'):        
         if type(date) is not datetime:
-            return date.strftime('%Y/%m/%d')            
-        return date
+            return date.strftime(s_format)            
+        else:
+            return date
             
-
-    def update_dates(self, s_date, e_date):        
+    # update _from _to dates of class, returns Success/Fail 
+    def update_dates(self, s_date, e_date):       
         if self.__check_dates(s_date, e_date) is True:
             self._from = self.__strToDate(s_date)
             self._to = self.__strToDate(e_date)
             return True
-            
-        return False
+        else:
+            return False
             
 
     def search(self, query, _from=None, _to=None):
         if _from is not None and _to is not None:                
             self.cur_search = self.news.search(query)
-
         else:
             self.cur_search = self.news.search(query)
             

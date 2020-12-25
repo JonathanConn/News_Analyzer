@@ -38,9 +38,14 @@ def my_form_post():
         return render_template('failure_alert.html'), 404      
         
     news.search(processed_text)
-    pos, neg = nlp.run_analysis(found_news)
 
-    return render_template('result.html', query=text, pos=str(pos), neg=str(neg), headlines=str(found_news))
+    headlines = []
+    for i in news.cur_search['entries']:
+        headlines.append(str(i.title))
+    
+    pos, neg = nlp.run_analysis(headlines)
+
+    return render_template('result.html', query=text, pos=str(pos), neg=str(neg), headlines=str(headlines))
 
 @app.route('/failure')
 def failure():
