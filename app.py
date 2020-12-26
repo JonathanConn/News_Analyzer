@@ -37,7 +37,7 @@ def my_form_post():
         app.log_exception('failed news update dates in app.py')
         return render_template('failure_alert.html'), 404      
         
-    news.search(processed_text)
+    news.search(processed_text, s_date, e_date)
 
     headlines = []
     for i in news.cur_search['entries']:

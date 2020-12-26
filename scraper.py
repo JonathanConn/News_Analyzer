@@ -52,8 +52,14 @@ class News():
             
 
     def search(self, query, _from=None, _to=None):
-        if _from is not None and _to is not None:                
-            self.cur_search = self.news.search(query)
+        if _from is not None and _to is not None:   
+            self.update_dates(_from, _to)          
+            
+            s_str = self.__dateToStr(self._from)
+            e_str = self.__dateToStr(self._to)   
+            
+            self.cur_search = self.news.search(query, from_=s_str, to_=e_str)
+
         else:
             self.cur_search = self.news.search(query)
             

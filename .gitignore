@@ -4,3 +4,5 @@ __pycache__/
 static/
 node_modules/
 package-lock.json
+templates/base.html
+test_app.py
