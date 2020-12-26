@@ -47,7 +47,7 @@ def my_form_post():
 
     result_headlines = Markup('<br>'.join(headlines))
 
-    return render_template('result.html', query=text, pos=str(pos), neg=str(neg), headlines=result_headlines)
+    return render_template('result.html', query=text, start=str(s_str), end=str(e_str), pos=str(pos), neg=str(neg), headlines=result_headlines)
 
 @app.route('/failure')
 def failure():
