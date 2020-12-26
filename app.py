@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, request, render_template, redirect, url_for, abort
+from flask import Flask, request, render_template, redirect, url_for, abort, Markup
 from flask.logging import default_handler
 
 from scraper import News
@@ -45,7 +45,9 @@ def my_form_post():
     
     pos, neg = nlp.run_analysis(headlines)
 
-    return render_template('result.html', query=text, pos=str(pos), neg=str(neg), headlines=str(headlines))
+    result_headlines = Markup('<br>'.join(headlines))
+
+    return render_template('result.html', query=text, pos=str(pos), neg=str(neg), headlines=result_headlines)
 
 @app.route('/failure')
 def failure():
